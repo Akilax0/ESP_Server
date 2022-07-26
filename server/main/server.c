@@ -12,7 +12,7 @@
 void app_main(void)
 {
     char * ourTaskname = pcTaskGetName(NULL);
-    ESP_LOGI(ourTaskname,"Hello, starting up!\n");
+    ESP_LOGI(ourTaskname,"Hello, starting up!... testing for win git\n");
 
     //flush config info for pin
     gpio_reset_pin(BLINK_LED);
