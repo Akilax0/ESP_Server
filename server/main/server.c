@@ -29,7 +29,6 @@
 #include "driver/gpio.h"
 
 
-
 #define BLINK_LED 2
 
 #define WIFI_SUCCESS 1<<0
@@ -76,7 +75,7 @@ static void ip_event_handler(void* arg, esp_event_base_t event_base, int32_t eve
 esp_err_t connect_wifi(){
     int status = WIFI_FAILURE;
 
-    //initialize esp network interface
+    //initialize esp network interface driver
     ESP_ERROR_CHECK(esp_netif_init());
 
     //initialize default esp event loop
@@ -155,7 +154,7 @@ esp_err_t conncet_tcp_server(void){
 
     serverInfo.sin_family = AF_INET;
     serverInfo.sin_addr.s_addr = 0x0100007f;
-    serverInfo.sin_port = htons(12345);
+    serverInfo.sin_port = htons(5555);
 
     int sock = socket(AF_INET, SOCK_STREAM,0);
     if(sock < 0){
@@ -208,7 +207,7 @@ void app_main(void)
     esp_err_t status = WIFI_FAILURE;
 
 
-    // storage initialization
+    // storage initialization (non volatile storage in flash)
     esp_err_t ret = nvs_flash_init();
     if(ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND){
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -225,6 +224,7 @@ void app_main(void)
         return;
     }
 
+    ESP_LOGI(TAG, "Connected to the WIFI Akila");
     status = conncet_tcp_server();
     if(TCP_SUCCESS != status){
         ESP_LOGI(TAG, "Failed to connect to remote server, dying ...");
